@@ -18,7 +18,7 @@ class CreateArticlesTable extends Migration
             $table->unsignedBigInteger('user_id'); //ユーザーID
             $table->string('title', 255); //タイトル
             $table->text('content'); // 本文
-            $table->string('image'); //画像ファイルパス
+            $table->string('image')->nullable(); //画像ファイルパス、null許容
             $table->timestamps();
             // user_id外部キー制約
             $table->foreign('user_id')->references('id')->on('users')
