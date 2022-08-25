@@ -14,4 +14,12 @@ class Article extends Model
         'content',
         'image',
     ];
+
+    /**
+     * リレーション設定 comments
+     */
+    public function comments()
+    {
+        return $this->hasMany('App\Models\Comment');
+    }
 }
