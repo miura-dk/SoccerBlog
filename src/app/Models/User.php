@@ -60,4 +60,20 @@ class User extends Authenticatable
     {
         return $this->hasMany('App\Models\Comment');
     }
+
+    /**
+     * リレーション設定 follows
+     */
+    public function follows()
+    {
+        return $this->belongsToMany(App\Models\User::class, 'follower_user', 'follower_id', 'user_id');
+    }
+
+    /**
+     * リレーション設定 followers
+     */
+    public function followers()
+    {
+        return $this->belongsToMany(App\Models\User::class, 'follower_user', 'user_id', 'follower_id');
+    }
 }
