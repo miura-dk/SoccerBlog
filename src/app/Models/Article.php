@@ -4,6 +4,7 @@ namespace App\Models\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Article extends Model
 {
@@ -37,5 +38,13 @@ class Article extends Model
     public function favorites()
     {
         return $this->hasMany('App\Models\Favorite');
+    }
+
+    /**
+     * リレーション設定 tags
+     */
+    public function tags() :BelongsToMany
+    {
+        return $this->belongsToMany('App\Models\Tag');
     }
 }
