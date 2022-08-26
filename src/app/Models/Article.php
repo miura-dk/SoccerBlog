@@ -16,10 +16,26 @@ class Article extends Model
     ];
 
     /**
+     * リレーション設定 users
+     */
+    public function users()
+    {
+        return $this->belongsTo('App\Models\User');
+    }
+
+    /**
      * リレーション設定 comments
      */
     public function comments()
     {
         return $this->hasMany('App\Models\Comment');
+    }
+
+    /**
+     * リレーション設定 favorites
+     */
+    public function favorites()
+    {
+        return $this->hasMany('App\Models\Favorite');
     }
 }
