@@ -5,6 +5,7 @@
  */
 
 require('./bootstrap');
+require('./csrf'); //CSRFトークン：Axiosでの非同期通信時必要
 
 window.Vue = require('vue').default;
 
@@ -24,6 +25,9 @@ import vuetify from './vuetify';
 
 // Vue.component('example-component', require('./components/ExampleComponent.vue').default);
 import ExampleComponent from './components/ExampleComponent.vue';
+//import HeaderNav from './components/HeaderNav.vue';
+import ArticleIndex from './components/ArticleIndex.vue';
+
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -36,5 +40,7 @@ const app = new Vue({
     vuetify,
     components:{
         "example-component": ExampleComponent,
+        ArticleIndex,
+
     },
 });
