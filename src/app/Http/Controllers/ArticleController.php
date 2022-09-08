@@ -7,12 +7,18 @@ use App\Models\Article;
 
 class ArticleController extends Controller
 {
+    public function __construct()
+    {
+        $this->article = new Article();
+    }
     
     /**
      * 記事一覧画面
      */
-    public function index(Article $article)
+    public function index()
     {
+        //$articles = $this->article->getAllArticleData();
+        
         //ダミーデータ
         $articles = [
             (object)[
@@ -49,8 +55,6 @@ class ArticleController extends Controller
                 ],
             ],
         ];
-
-        //$articles = $article->all()->sortBy('created_at','DESC');
 
         return view('articles.index',compact('articles'));
     }

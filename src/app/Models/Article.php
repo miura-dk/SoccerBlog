@@ -50,4 +50,15 @@ class Article extends Model
     {
         return $this->belongsToMany('App\Models\Tag');
     }
+
+    /**
+     * articlesテーブルのレコードを全件取得
+     * 
+     * @param void
+     * @return Article articlesテーブル
+     */
+    public function getAllArticleData()
+    {
+        return $this->get()->sortByDesc('created_at');
+    }
 }
