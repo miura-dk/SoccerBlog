@@ -17,6 +17,6 @@ use Illuminate\Support\Facades\Route;
 //     return view('welcome');
 // });
 
-Auth::routes();
+Auth::routes(); //認証関連のルーティング
 
 Route::get('/', [App\Http\Controllers\ArticleController::class, 'index']);
