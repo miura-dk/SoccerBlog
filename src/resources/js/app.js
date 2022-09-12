@@ -12,6 +12,15 @@ window.Vue = require('vue').default;
 import Vue from 'vue';
 import vuetify from './vuetify';
 
+import route from '../../vendor/tightenco/ziggy/src/js/Route';
+import { Ziggy } from './ziggy';
+
+Vue.mixin({
+    methods: {
+        route: (name, params, absolute) => route(name, params, absolute, Ziggy),
+    },
+});
+
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue
@@ -27,7 +36,7 @@ import vuetify from './vuetify';
 import ExampleComponent from './components/ExampleComponent.vue';
 //import HeaderNav from './components/HeaderNav.vue';
 import ArticleIndex from './components/ArticleIndex.vue';
-
+import RegisterAsUser from './components/RegisterAsUser.vue';
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -41,6 +50,7 @@ const app = new Vue({
     components:{
         "example-component": ExampleComponent,
         ArticleIndex,
-
+        RegisterAsUser,
     },
 });
+
