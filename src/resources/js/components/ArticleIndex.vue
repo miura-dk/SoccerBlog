@@ -22,10 +22,10 @@
       <ul
       class="cyan"
       dark
-      style="width:50%; display:flex;"
+      style="display:flex; justify-content:end; align-items:center"
       >
             <li class="ml-4">
-              <a class="white--text" href="">ユーザー登録</a>
+              <a class="white--text" :href="urlRegister">ユーザー登録</a>
             </li>
           
             <li class="ml-4">
@@ -33,7 +33,7 @@
             </li>
           
             <li class="ml-4">
-              <v-icon class="mr-2">mdi-pencil</v-icon><a class="white--text" href=""><span>投稿する</span></a>
+              <a class="white--text" href=""><v-icon class="mr-1">mdi-pencil</v-icon><span>投稿する</span></a>
             </li>
       </ul>
 
@@ -80,10 +80,10 @@
       dense>
         <v-list-item-group>
           <v-list-item>
-            <v-list-item-title>HOME</v-list-item-title>
+            <v-list-item-title><a class="white--text" href="/">HOME</a></v-list-item-title>
           </v-list-item>
           <v-list-item>
-            <v-list-item-title>ユーザー登録</v-list-item-title>
+            <v-list-item-title><a class="white--text" href="">ユーザー登録</a></v-list-item-title>
           </v-list-item>
           <v-list-item>
             <v-list-item-title>ログイン</v-list-item-title>
@@ -158,7 +158,7 @@
                       <v-list-item-title><v-icon class="mr-2">mdi-file-edit-outline</v-icon>記事を更新する</v-list-item-title>
                     </v-list-item>
                     <v-list-item>
-                      <v-list-item-title><v-icon class="mr-2 red">mdi-trash-can-outline</v-icon>記事を削除する</v-list-item-title>
+                      <v-list-item-title style="color:pink;"><v-icon class="mr-2 red">mdi-trash-can-outline</v-icon>記事を削除する</v-list-item-title>
                     </v-list-item>
                   </div>
                 </v-list-item-group>
@@ -183,15 +183,15 @@
             <div>本文：{{article.content}}</div>
 
             <div>
-              <v-btn 
-                color="#00BCD4"
-                class="ml-auto"
+              <a
+                class="grey--text text--lighten-2" 
+                href=""
               >
                 続きを読む
                 <v-icon class="ml-1">
                   mdi-chevron-double-right
                 </v-icon>
-              </v-btn>
+              </a>
             </div>
             
 
@@ -252,10 +252,13 @@
                 type: Array,
                 required: true,
             },
+            urlRegister:{
+              type: String,
+            },
         },
         methods: {
           // timestampから指定したdate形式(Y/m/d H:i:s)に変換
-          changeDateFormat(date){
+          changeTimestampToFormat(date){
             //let timestamp = 1318518000;
             let d = new Date(date*1000);
             let year = d.getFullYear();

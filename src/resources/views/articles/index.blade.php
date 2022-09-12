@@ -7,7 +7,10 @@
 @section('content')
 
 
-        <article-index :articles='@json($articles)' />
+        <article-index 
+        :articles='@json($articles)'
+        url-register="{{ route('register') }}"
+        />
 
 
 @endsection
