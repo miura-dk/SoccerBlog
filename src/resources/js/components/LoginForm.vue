@@ -26,25 +26,17 @@
                       flat
                       style="display:flex; justify-content:center;"
                     >
-                        <v-toolbar-title>ユーザー登録</v-toolbar-title>
-                        <v-spacer />
+                      <v-toolbar-title>ログイン</v-toolbar-title>
+                      <v-spacer />
                     </v-toolbar>
 
                     <form
                       method="POST"
-                      :action="urlRegister"
-                      id="register"
+                      :action="urlLogin"
+                      id="login"
                     >
                       <input type="hidden" name="_token" :value="csrf">
                         <v-card-text>
-                            <v-text-field
-                              label="名前"
-                              name="name"
-                              prepend-icon="mdi-account-circle"
-                              type="text"
-                              v-model="name"
-                            />
-                            <small>2〜100文字(登録後の変更はできません)</small>
                             <v-text-field
                               label="メールアドレス"
                               name="email"
@@ -62,14 +54,6 @@
                               v-model="password"
                               hint="英数字8文字以上"
                             />
-                            <v-text-field
-                              label="パスワード(確認)"
-                              name="password_confirmation"
-                              prepend-icon="mdi-lock"
-                              type="password"
-                              v-model="password_confirmation"
-                            />
-                        
                         </v-card-text>
 
                         <v-card-actions
@@ -78,9 +62,9 @@
                             <v-btn
                               type="submit"
                               color="primary"
-                              form="register"
+                              form="login"
                             >
-                                ユーザー登録
+                              ログイン
                             </v-btn>
                             
                         </v-card-actions>
@@ -89,7 +73,7 @@
                       class="mt-2 mb-4"
                       style="display:flex; justify-content: center;"
                     >
-                        <a :href="urlLoginForm" class="blue--text p-2">ログインはこちら</a>
+                      <a :href="urlRegister" class="blue--text p-2">ユーザー登録はこちら</a>
                     </div>
                 </v-card>
             </v-col>
@@ -101,49 +85,25 @@
 <script>
 export default {
     props:{
-        urlRegister:{
-            type: String,
-        },
-        urlLoginForm:{
-          type: String,
-        },
+      urlLogin:{
+        type: String,
+      },
+      urlRegister:{
+        type: String,
+      },
     },
     data(){
         return {
-            name: "",
             email: "",
             password: "",
-            password_confirmation: "",
             showPassword : false,
+
             csrf: document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
         }
     },
     methods: {
-        postRegister(){
-            axios.post(window.location.origin + `/register`,{
-                name: this.name,
-                email: this.email,
-                password: this.password,
-                password_confirmation: this.password_confirmation
-            })
-            .then(response => {
-                window.location.href = `/`;
-            })
-            .catch(error =>{
-                console.log("エラーが発生しました。");
-            });
-        },
-
-        submitData(){
-            console.log(this.name,this.email,this.password,this.password_confirmation)
-        },
-
+      
     },
-    // computed:{
-    //   csrf(){
-    //     document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-    //   }
-    // },
 
 }
 </script>
