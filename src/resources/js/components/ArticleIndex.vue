@@ -24,15 +24,18 @@
       dark
       style="display:flex; justify-content:end; align-items:center"
       >
-            <li class="ml-4">
+            <li class="ml-4"
+              v-if="authorized == false">
               <a class="white--text" :href="urlRegister">ユーザー登録</a>
             </li>
           
-            <li class="ml-4">
-              <a class="white--text" href="">ログイン</a>
+            <li class="ml-4"
+              v-if="authorized == false">
+              <a class="white--text" :href="urlLoginForm">ログイン</a>
             </li>
           
-            <li class="ml-4">
+            <li class="ml-4"
+              v-if="authorized == true">
               <a class="white--text" href=""><v-icon class="mr-1">mdi-pencil</v-icon><span>投稿する</span></a>
             </li>
       </ul>
@@ -40,6 +43,7 @@
       <v-menu
         left
         bottom
+        v-if="authorized == true"
       >
         <template v-slot:activator="{ on }">
           <v-btn icon v-on="on">
@@ -54,18 +58,24 @@
         dark
         >
           <v-list-item-group>
-          <div
-            @click="() => {}"
-          >
-          <v-list-item>
-            <v-list-item-title>マイページ</v-list-item-title>
-          </v-list-item>
-          <v-list-item>
-            <v-list-item-title>ログアウト</v-list-item-title>
-          </v-list-item>
-          </div>
+            <div
+              @click="() => {}"
+            >
+              <v-list-item>
+                <v-list-item-title>マイページ</v-list-item-title>
+              </v-list-item>
+              
+              <v-list-item>
+                <v-list-item-title><button form="logout-button" type="submit">ログアウト</button></v-list-item-title>
+              </v-list-item>
+              
+            </div>
           </v-list-item-group>
         </v-list>
+        
+        <form id="logout-button" method="POST" :action="urlLogout">
+          <input type="hidden" name="_token" :value="csrf">
+        </form>
       </v-menu>
     </v-app-bar>
     <v-navigation-drawer
@@ -82,20 +92,32 @@
           <v-list-item>
             <v-list-item-title><a class="white--text" href="/">HOME</a></v-list-item-title>
           </v-list-item>
-          <v-list-item>
-            <v-list-item-title><a class="white--text" href="">ユーザー登録</a></v-list-item-title>
+          <v-list-item
+            v-show="authorized == false"
+            :href="urlRegister"
+          >
+            <v-list-item-title><a class="white--text">ユーザー登録</a></v-list-item-title>
           </v-list-item>
-          <v-list-item>
+          <v-list-item
+            v-show="authorized == false"
+            :href="urlLoginForm"
+          >
             <v-list-item-title>ログイン</v-list-item-title>
           </v-list-item>
-          <v-list-item>
+          <v-list-item
+            v-show="authorized == true"
+          >
             <v-list-item-title>マイページ</v-list-item-title>
           </v-list-item>
-          <v-list-item>
+          <v-list-item
+            v-show="authorized == true"
+          >
             <v-list-item-title>お気に入り</v-list-item-title>
           </v-list-item>
-          <v-list-item>
-            <v-list-item-title>ログアウト</v-list-item-title>
+          <v-list-item
+            v-show="authorized == true"
+          >
+            <v-list-item-title><button form="logout-button" type="submit">ログアウト</button></v-list-item-title>
           </v-list-item>
         </v-list-item-group>
       </v-list>
@@ -239,40 +261,54 @@
 </template>
 
 <script>
-    export default {
-        data(){
-            return {
-              dateResult:'',
-              
-              drawer: false,
-            }
-        },
-        props:{
-            articles:{
-                type: Array,
-                required: true,
-            },
-            urlRegister:{
-              type: String,
-            },
-        },
-        methods: {
-          // timestampから指定したdate形式(Y/m/d H:i:s)に変換
-          changeTimestampToFormat(date){
-            //let timestamp = 1318518000;
-            let d = new Date(date*1000);
-            let year = d.getFullYear();
-            let month = d.getMonth() + 1;
-            let day = d.getDate();
-            let hour = (d.getHours()<10) ? '0'+d.getHours() : (d.getHours());
-            let min = (d.getMinutes()<10) ? '0'+d.getMinutes() : (d.getMinites());
-            let sec = (d.getSeconds()<10) ? '0'+d.getSeconds() : (d.getSeconds());
-
-            this.dateResult = year+'-'+month+'-'+day+' '+hour+':'+min+':'+sec;
-            return this.dateResult;
-          }
+  export default {
+    data(){
+        return {
+          dateResult:'',
+          drawer: false,
+          authorized: this.authorized,
+          csrf: document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
         }
-    }
+    },
+    props:{
+        articles:{
+          type: Array,
+          required: true,
+        },
+        urlRegister:{
+          type: String,
+        },
+        authorized:{
+          type: Boolean,
+          default: false,
+        },
+        urlLoginForm:{
+          type: String,
+        },
+        urlLogout:{
+          type: String,
+        }
+    },
+    methods: {
+      // timestampから指定したdate形式(Y/m/d H:i:s)に変換
+      changeTimestampToFormat(date){
+        //let timestamp = 1318518000;
+        let d = new Date(date*1000);
+        let year = d.getFullYear();
+        let month = d.getMonth() + 1;
+        let day = d.getDate();
+        let hour = (d.getHours()<10) ? '0'+d.getHours() : (d.getHours());
+        let min = (d.getMinutes()<10) ? '0'+d.getMinutes() : (d.getMinites());
+        let sec = (d.getSeconds()<10) ? '0'+d.getSeconds() : (d.getSeconds());
+
+        this.dateResult = year+'-'+month+'-'+day+' '+hour+':'+min+':'+sec;
+        return this.dateResult;
+      }
+    },
+    computed:{
+      
+    },
+  }
 </script>
 
 <style>

@@ -7,9 +7,10 @@
     <title>
         @yield('title')
     </title>
+    @routes
     <link href="{{ mix('css/app.css') }}" rel="stylesheet">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    @routes
+    
 </head>
 <body>
     <div id="app">

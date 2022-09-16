@@ -4,7 +4,9 @@
 
 @section('content')
 
-
-<register-as-user url-register="{{route('register')}}" />
+@include('error_list')
+<register-as-user
+ url-register="{{route('register')}}"
+/>
 
 @endsection
