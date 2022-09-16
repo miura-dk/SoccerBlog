@@ -30,10 +30,12 @@
                         <v-spacer />
                     </v-toolbar>
 
-                    <v-form
-                      @submit.prevent
-                      :ref="urlRegister"
+                    <form
+                      method="POST"
+                      :action="urlRegister"
+                      id="register"
                     >
+                      <input type="hidden" name="_token" :value="csrf">
                         <v-card-text>
                             <v-text-field
                               label="名前"
@@ -74,21 +76,21 @@
                           class="justify-center"
                         >
                             <v-btn
-                              @click="submit"
+                              type="submit"
                               color="primary"
+                              form="register"
                             >
                                 ユーザー登録
                             </v-btn>
                             
                         </v-card-actions>
-                    </v-form>
+                    </form>
                     <div
                       class="mt-2 mb-4"
                       style="display:flex; justify-content: center;"
                     >
                         <a href="" class="blue--text">ログインはこちら</a>
                     </div>
-                    
                 </v-card>
             </v-col>
         </v-row>
@@ -102,7 +104,6 @@ export default {
         urlRegister:{
             type: String,
         },
-
     },
     data(){
         return {
@@ -111,6 +112,7 @@ export default {
             password: "",
             password_confirmation: "",
             showPassword : false,
+            csrf: document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
         }
     },
     methods: {
@@ -132,7 +134,13 @@ export default {
         submitData(){
             console.log(this.name,this.email,this.password,this.password_confirmation)
         },
+
     },
+    // computed:{
+    //   csrf(){
+    //     document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+    //   }
+    // },
 
 }
 </script>
