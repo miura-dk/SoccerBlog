@@ -13,6 +13,7 @@
         :authorized='@json(Auth::check())'
         url-login-form="{{ route('login') }}"
         url-logout="{{ route('logout') }}"
+        url-articles-create="{{ route('articles.create') }}"
         />
 
 

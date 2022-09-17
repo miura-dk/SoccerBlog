@@ -58,4 +58,12 @@ class ArticleController extends Controller
 
         return view('articles.index',compact('articles'));
     }
+
+    /**
+     * 記事投稿画面の表示
+     */
+    public function create()
+    {
+        return view('articles.create');
+    }
 }

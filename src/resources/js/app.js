@@ -38,6 +38,7 @@ import ExampleComponent from './components/ExampleComponent.vue';
 import ArticleIndex from './components/ArticleIndex.vue';
 import RegisterAsUser from './components/RegisterAsUser.vue';
 import LoginForm from './components/LoginForm';
+import ArticleCreate from './components/ArticleCreate.vue';
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -53,6 +54,7 @@ const app = new Vue({
         ArticleIndex,
         RegisterAsUser,
         LoginForm,
+        ArticleCreate,
     },
 });
 
