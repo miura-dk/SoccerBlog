@@ -12,10 +12,10 @@
       >
       </v-app-bar-nav-icon>
       <v-toolbar-title>
-        <a href="/" class="indigo--text">
+        <a href="/" class="white--text">
               <v-icon class="mr-1">
                 mdi-soccer
-              </v-icon>Soccer-Blog-Site
+              </v-icon>Soccer-Blog
         </a>
       </v-toolbar-title>
       <div class="ml-auto"></div>
@@ -36,7 +36,10 @@
           
             <li class="ml-4"
               v-if="authorized == true">
-              <a class="white--text" href=""><v-icon class="mr-1">mdi-pencil</v-icon><span>投稿する</span></a>
+              <a class="white--text" :href="urlArticlesCreate">
+                <v-icon class="mr-1">mdi-pencil</v-icon>
+                <span>投稿する</span>
+              </a>
             </li>
       </ul>
 
@@ -66,14 +69,14 @@
               </v-list-item>
               
               <v-list-item>
-                <v-list-item-title><button form="logout-button" type="submit">ログアウト</button></v-list-item-title>
+                <v-list-item-title><button form="logout-button-2" type="submit">ログアウト</button></v-list-item-title>
               </v-list-item>
               
             </div>
           </v-list-item-group>
         </v-list>
         
-        <form id="logout-button" method="POST" :action="urlLogout">
+        <form id="logout-button-2" method="POST" :action="urlLogout">
           <input type="hidden" name="_token" :value="csrf">
         </form>
       </v-menu>
@@ -117,10 +120,13 @@
           <v-list-item
             v-show="authorized == true"
           >
-            <v-list-item-title><button form="logout-button" type="submit">ログアウト</button></v-list-item-title>
+            <v-list-item-title><button form="logout-button-1" type="submit">ログアウト</button></v-list-item-title>
           </v-list-item>
         </v-list-item-group>
       </v-list>
+      <form id="logout-button-1" method="POST" :action="urlLogout">
+          <input type="hidden" name="_token" :value="csrf">
+      </form>
     </v-navigation-drawer>
 
   </header>
@@ -145,6 +151,7 @@
         max-width="400"
         color="#3F51B5"
         dark
+        height="500px"
         >
           <v-img
             class="white--text align-end"
@@ -187,10 +194,6 @@
               </v-list>
             </v-menu>
           </v-card-title>
-
-          <v-card-subtitle class="pb-0">
-            サブタイトルです
-          </v-card-subtitle>
 
           <v-card-text>
             <v-icon class="mr-2">
@@ -286,6 +289,9 @@
           type: String,
         },
         urlLogout:{
+          type: String,
+        },
+        urlArticlesCreate:{
           type: String,
         }
     },

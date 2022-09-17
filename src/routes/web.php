@@ -19,4 +19,5 @@ use Illuminate\Support\Facades\Route;
 
 Auth::routes(); //認証関連のルーティング
 
-Route::get('/', [App\Http\Controllers\ArticleController::class, 'index']);
+Route::get('/', [App\Http\Controllers\ArticleController::class, 'index'])->name('articles.index');
+Route::resource('/articles', App\Http\Controllers\ArticleController::class)->except(['index'])->middleware('auth'); //index以外のリソースルート
