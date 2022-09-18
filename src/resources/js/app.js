@@ -34,7 +34,6 @@ Vue.mixin({
 
 // Vue.component('example-component', require('./components/ExampleComponent.vue').default);
 import ExampleComponent from './components/ExampleComponent.vue';
-//import HeaderNav from './components/HeaderNav.vue';
 import ArticleIndex from './components/ArticleIndex.vue';
 import RegisterAsUser from './components/RegisterAsUser.vue';
 import LoginForm from './components/LoginForm';
