@@ -14,15 +14,16 @@ class Article extends Model
      * fillable
      */
     protected $fillable = [
+        'user_id',
         'title',
         'content',
         'image',
     ];
 
     /**
-     * リレーション設定 users
+     * リレーション設定 user
      */
-    public function users()
+    public function user()
     {
         return $this->belongsTo('App\Models\User');
     }
@@ -60,5 +61,18 @@ class Article extends Model
     public function getAllArticleData()
     {
         return $this->get()->sortByDesc('created_at');
+    }
+
+    /**
+     * 登録処理
+     * articlesテーブルにデータを挿入
+     */
+    public function insertArticleData($request)
+    {
+        return $this->create([
+            'user_id' => $request->user()->id,
+            'title' => $request->title,
+            'content' => $request->content,
+        ]);
     }
 }
