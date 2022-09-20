@@ -132,6 +132,17 @@
   </header>
   
 <v-content>
+  <v-alert 
+    type="success" 
+    v-if="flashSuccessMessage !== ''"
+  >
+    flashSuccessMessage
+  </v-alert>
+  <v-alert type="error"
+    v-if="flashErrorMessage !== ''">
+      error message
+  </v-alert>
+  
   <v-container 
   fluid
   >
@@ -151,7 +162,8 @@
         max-width="400"
         color="#3F51B5"
         dark
-        height="500px"
+        v-for="(name,index) in initialUsernames"
+        :key="index"
         >
           <v-img
             class="white--text align-end"
@@ -161,7 +173,7 @@
           </v-img>
 
           <v-card-title>
-            <a href="" style="text-decoration: none; color:white;">タイトル：{{article.title}}</a>
+            <a href="" style="text-decoration: none; color:white;">{{article['title']}}</a>
             <div class="ml-auto"></div>
             <v-menu
               left
@@ -199,13 +211,12 @@
             <v-icon class="mr-2">
                   mdi-account-circle
             </v-icon>
-            名前：{{ article.user.name }}
+            名前：{{ name }}
           </v-card-text>
 
           <v-card-text>
-            <div>Whitehaven Beach 画像{{article.user.id}}</div>
 
-            <div>本文：{{article.content}}</div>
+            <div>本文：{{article['content']}}</div>
 
             <div>
               <a
@@ -224,7 +235,7 @@
               <v-icon class="mr-2">
                 mdi-clock
               </v-icon>
-              作成日：{{article.created_at}}
+              作成日：{{article['created_at']}}
               <v-icon class="ml-4 mr-1">
                 mdi-star
               </v-icon>
@@ -271,6 +282,7 @@
           drawer: false,
           authorized: this.authorized,
           csrf: document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+          
         }
     },
     props:{
@@ -293,6 +305,17 @@
         },
         urlArticlesCreate:{
           type: String,
+        },
+        initialUsernames:{
+          type: Array,
+        },
+        flashSuccessMessage:{
+          type: String,
+          dafault: '',
+        },
+        flashErrorMessage:{
+          type: String,
+          dafault: '',
         }
     },
     methods: {
