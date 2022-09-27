@@ -178,6 +178,7 @@
             <v-menu
               left
               bottom
+              v-show="article.matched == true"
             >
               <template v-slot:activator="{ on }">
                 <v-btn icon v-on="on">
@@ -195,7 +196,8 @@
                   <div
                     @click="() => {}"
                   >
-                    <v-list-item>
+                    <v-list-item
+                      @click="editArticle(article.id)">
                       <v-list-item-title><v-icon class="mr-2">mdi-file-edit-outline</v-icon>記事を更新する</v-list-item-title>
                     </v-list-item>
                     <v-list-item>
@@ -211,7 +213,7 @@
             <v-icon class="mr-2">
                   mdi-account-circle
             </v-icon>
-            名前：{{ name }}
+            {{ name }}
           </v-card-text>
 
           <v-card-text>
@@ -235,7 +237,7 @@
               <v-icon class="mr-2">
                 mdi-clock
               </v-icon>
-              作成日：{{article['created_at']}}
+              作成日：{{article['created_date']}}
               <v-icon class="ml-4 mr-1">
                 mdi-star
               </v-icon>
@@ -264,6 +266,17 @@
               フォローする
             </v-btn>
           </v-card-actions>
+
+          <v-card-actions>
+            <v-btn
+              color="#00BCD4"
+            >
+              続きを読む
+              <v-icon class="ml-1">
+                mdi-chevron-double-right
+              </v-icon>
+            </v-btn>
+          </v-card-actions>
         </v-card>
       </v-col>
     </v-row>
@@ -282,7 +295,7 @@
           drawer: false,
           authorized: this.authorized,
           csrf: document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-          
+          urlArticlesEdit: '',
         }
     },
     props:{
@@ -316,7 +329,7 @@
         flashErrorMessage:{
           type: String,
           dafault: '',
-        }
+        },
     },
     methods: {
       // timestampから指定したdate形式(Y/m/d H:i:s)に変換
@@ -332,7 +345,25 @@
 
         this.dateResult = year+'-'+month+'-'+day+' '+hour+':'+min+':'+sec;
         return this.dateResult;
-      }
+      },
+
+      editArticle(id){
+        //ここに編集ボタンを押したときに対象の記事のid(article.id)を取得してそれをURL{article}部分に組み込む処理をつくる。例として@click="editArticle(article.id)"
+        let url = location.href; //このページのURLをstring型で取得
+        let urlArticlesEdit = ''; //初期化
+        urlArticlesEdit = url +'articles/'+ id + '/edit';
+        console.log(urlArticlesEdit);
+
+        // this.articles.forEach(article =>{
+        //   if(article.id == id){
+        //     const articleData = article;
+        //   }
+        // });
+        // this.$emit('child-event',articleData);
+
+        // 編集ページへ遷移する
+        location.href = urlArticlesEdit;
+      },
     },
     computed:{
       
