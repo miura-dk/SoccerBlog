@@ -18,5 +18,4 @@
         flash-error-message="{{ session('error') ? session('error') : ''}}"
         />
 
-
 @endsection

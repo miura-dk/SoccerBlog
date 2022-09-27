@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Article;
 use App\Http\Requests\ArticleRequest;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class ArticleController extends Controller
 {
@@ -62,6 +63,17 @@ class ArticleController extends Controller
             $userNames[] = $user->name;
         }
         
+        //認証済みユーザーが記事のユーザーIDと一致するか比較し、一覧画面で更新削除メニューを一致する場合のみ表示するようにする
+        // collectionのeachメソッドで各記事情報に処理を行い、created_date、matched(boolean)を追加
+        $articles->each(function($article){
+            $created_at = $article->created_at;
+            $article->created_date = date("Y/m/d H:i:s", strtotime($created_at));
+            $article->matched  = false;
+            if(Auth::id() === $article->user_id){
+                $article->matched = true;
+            }
+            return $article;
+        });
 
         return view('articles.index',compact('articles','userNames'));
     }
@@ -95,5 +107,14 @@ class ArticleController extends Controller
 
         return redirect()->route('articles.index')->with('success','投稿に成功しました。');
 
+    }
+
+    /**
+     * 記事更新画面の表示
+     */
+    public function edit(Article $article)
+    {
+        
+        return view('articles.edit', compact('article'));
     }
 }
