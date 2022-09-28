@@ -200,13 +200,42 @@
                       @click="editArticle(article.id)">
                       <v-list-item-title><v-icon class="mr-2">mdi-file-edit-outline</v-icon>記事を更新する</v-list-item-title>
                     </v-list-item>
-                    <v-list-item>
+                    <v-list-item
+                      @click.stop="dialog = true"
+                    >
                       <v-list-item-title style="color:pink;"><v-icon class="mr-2 red">mdi-trash-can-outline</v-icon>記事を削除する</v-list-item-title>
                     </v-list-item>
                   </div>
                 </v-list-item-group>
               </v-list>
             </v-menu>
+
+                <v-dialog
+                  v-model="dialog"
+                  persistent
+                >
+                    <form id="delete" method="POST" action="">
+                        <input type="hidden" name="_token" :value="csrf">
+                        <input type="hidden" name="_method" value="DELETE">
+                        <v-card>
+                          <v-card-text>{{ article['title'] }}を削除します。よろしいですか？</v-card-text>
+                          <v-card-actions>
+                            <v-spacer></v-spacer>
+                            <v-btn @click="dialog = false">
+                            キャンセル
+                            </v-btn>
+
+                            <v-btn
+                              @click="dialog = false"
+                              type="submit"
+                              form="delete">
+                            削除する
+                            </v-btn>
+                          </v-card-actions>
+                        </v-card>
+                    </form>
+                </v-dialog>
+            
           </v-card-title>
 
           <v-card-text>
@@ -217,21 +246,7 @@
           </v-card-text>
 
           <v-card-text>
-
-            <div>本文：{{article['content']}}</div>
-
-            <div>
-              <a
-                class="grey--text text--lighten-2" 
-                href=""
-              >
-                続きを読む
-                <v-icon class="ml-1">
-                  mdi-chevron-double-right
-                </v-icon>
-              </a>
-            </div>
-            
+            <div>{{article['content']}}</div>
 
             <div>
               <v-icon class="mr-2">
@@ -293,9 +308,9 @@
         return {
           dateResult:'',
           drawer: false,
-          authorized: this.authorized,
           csrf: document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
           urlArticlesEdit: '',
+          dialog: false,
         }
     },
     props:{
@@ -364,6 +379,11 @@
         // 編集ページへ遷移する
         location.href = urlArticlesEdit;
       },
+
+      // モーダルウィンドウを開く
+      // openModal(){
+      //   this.dialog = true;
+      // },
     },
     computed:{
       
