@@ -136,11 +136,11 @@
     type="success" 
     v-if="flashSuccessMessage !== ''"
   >
-    flashSuccessMessage
+    {{flashSuccessMessage}}
   </v-alert>
   <v-alert type="error"
     v-if="flashErrorMessage !== ''">
-      error message
+      {{flashErrorMessage}}
   </v-alert>
   
   <v-container 
@@ -162,8 +162,6 @@
         max-width="400"
         color="#3F51B5"
         dark
-        v-for="(name,index) in initialUsernames"
-        :key="index"
         >
           <v-img
             class="white--text align-end"
@@ -202,6 +200,7 @@
                     </v-list-item>
                     <v-list-item
                       @click.stop="dialog = true"
+                      @click="getArticleTitle(article)"
                     >
                       <v-list-item-title style="color:pink;"><v-icon class="mr-2 red">mdi-trash-can-outline</v-icon>記事を削除する</v-list-item-title>
                     </v-list-item>
@@ -218,7 +217,7 @@
                         <input type="hidden" name="_token" :value="csrf">
                         <input type="hidden" name="_method" value="DELETE">
                         <v-card>
-                          <v-card-text>{{ article['title'] }}を削除します。よろしいですか？</v-card-text>
+                          <v-card-text>{{ articleTitle }}を削除します。よろしいですか？</v-card-text>
                           <v-card-actions>
                             <v-spacer></v-spacer>
                             <v-btn @click="dialog = false">
@@ -238,11 +237,30 @@
             
           </v-card-title>
 
+          <v-row>
+            <v-col>
+              <v-icon class="ml-4 mr-1">
+                mdi-star
+              </v-icon>
+              3
+            </v-col>
+          </v-row>
+
           <v-card-text>
             <v-icon class="mr-2">
                   mdi-account-circle
             </v-icon>
-            {{ name }}
+            {{ article['user_name'] }}
+
+            <v-btn
+              color="#00BCD4"
+              class="ml-auto"
+            >
+              <v-icon class="mr-1">
+                mdi-account-plus-outline
+              </v-icon>
+              フォローする
+            </v-btn>
           </v-card-text>
 
           <v-card-text>
@@ -253,10 +271,7 @@
                 mdi-clock
               </v-icon>
               作成日：{{article['created_date']}}
-              <v-icon class="ml-4 mr-1">
-                mdi-star
-              </v-icon>
-              5
+              
             </div>
 
           </v-card-text>
@@ -272,17 +287,6 @@
               お気に入り追加
             </v-btn>
 
-            <v-btn
-              color="#00BCD4"
-            >
-              <v-icon class="mr-1">
-                mdi-account-plus-outline
-              </v-icon>
-              フォローする
-            </v-btn>
-          </v-card-actions>
-
-          <v-card-actions>
             <v-btn
               color="#00BCD4"
             >
@@ -309,7 +313,8 @@
           dateResult:'',
           drawer: false,
           csrf: document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-          urlArticlesEdit: '',
+          articleTitle: '',
+          deleteArticleId: '',
           dialog: false,
         }
     },
@@ -334,9 +339,6 @@
         urlArticlesCreate:{
           type: String,
         },
-        initialUsernames:{
-          type: Array,
-        },
         flashSuccessMessage:{
           type: String,
           dafault: '',
@@ -348,6 +350,7 @@
     },
     methods: {
       // timestampから指定したdate形式(Y/m/d H:i:s)に変換
+      /*
       changeTimestampToFormat(date){
         //let timestamp = 1318518000;
         let d = new Date(date*1000);
@@ -361,6 +364,7 @@
         this.dateResult = year+'-'+month+'-'+day+' '+hour+':'+min+':'+sec;
         return this.dateResult;
       },
+      */
 
       editArticle(id){
         //ここに編集ボタンを押したときに対象の記事のid(article.id)を取得してそれをURL{article}部分に組み込む処理をつくる。例として@click="editArticle(article.id)"
@@ -380,10 +384,11 @@
         location.href = urlArticlesEdit;
       },
 
-      // モーダルウィンドウを開く
-      // openModal(){
-      //   this.dialog = true;
-      // },
+      // 削除記事のobjectから記事のタイトル,idを見つける(クリックで呼び出す)
+      getArticleTitle(obj){
+        this.articleTitle = obj.title;
+        this.deleteArticleId = obj.id;
+      },
     },
     computed:{
       

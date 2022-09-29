@@ -58,14 +58,15 @@ class ArticleController extends Controller
         //         ],
         //     ],
         // ];
-        foreach($articles as $article){
-            $user = $article->user;
-            $userNames[] = $user->name;
-        }
+        // foreach($articles as $article){
+        //     $user = $article->user;
+        //     $userNames[] = $user->name;
+        // }
         
         //認証済みユーザーが記事のユーザーIDと一致するか比較し、一覧画面で更新削除メニューを一致する場合のみ表示するようにする
         // collectionのeachメソッドで各記事情報に処理を行い、created_date、matched(boolean)を追加
         $articles->each(function($article){
+            $article->user_name = $article->user->name; //投稿ユーザー名
             $created_at = $article->created_at;
             $article->created_date = date("Y/m/d H:i:s", strtotime($created_at));
             $article->matched  = false;
@@ -74,8 +75,9 @@ class ArticleController extends Controller
             }
             return $article;
         });
+        //dd($articles);
 
-        return view('articles.index',compact('articles','userNames'));
+        return view('articles.index',compact('articles'));
     }
 
     /**
@@ -116,5 +118,34 @@ class ArticleController extends Controller
     {
         
         return view('articles.edit', compact('article'));
+    }
+
+    /**
+     * 記事更新処理
+     * 
+     * 引数：フォームリクエストデータ＋ 更新対象のレコードを記事モデルからDIして取得
+     */
+    public function update(ArticleRequest $request, Article $article)
+    {
+        // 記事IDを取得
+        // $articleId = $request->id;
+        // 記事IDをもとに更新対象のレコードを1件取得
+        // $article = $this->article->find($articleId);
+
+        try{
+            // トランザクション開始
+            DB::beginTransaction();
+            // 更新対象のレコードの更新処理実行
+            $isUpdated = $this->article->updateArticle($request, $article);
+            //処理に成功したらコミット
+            DB::commit();
+        }catch(\Throwable $e){
+            // 処理に失敗したらロールバック
+            DB::rollback();
+
+            return redirect()->route('articles.index')->with('error','記事の更新に失敗しました。');
+        }
+
+        return redirect()->route('articles.index')->with('success','記事の更新に成功しました。');
     }
 }

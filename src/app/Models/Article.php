@@ -75,4 +75,15 @@ class Article extends Model
             'content' => $request->content,
         ]);
     }
+
+    /**
+     * 更新処理
+     */
+    public function updateArticle($request, $article)
+    {
+        return $article->fill([
+            'title' => $request->title,
+            'content' => $request->content,
+        ])->save();
+    }
 }
