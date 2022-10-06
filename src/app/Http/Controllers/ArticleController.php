@@ -148,4 +148,26 @@ class ArticleController extends Controller
 
         return redirect()->route('articles.index')->with('success','記事の更新に成功しました。');
     }
+
+    /**
+     * 記事削除
+     */
+    public function destroy(Article $article)
+    {
+        try{
+            // トランザクション開始
+            DB::beginTransaction();
+            // 対象のレコードの削除処理実行
+            $isDeleted = $article->delete();
+            //処理に成功したらコミット
+            DB::commit();
+        }catch(\Throwable $e){
+            // 処理に失敗したらロールバック
+            DB::rollback();
+
+            return redirect()->route('articles.index')->with('error','記事の削除に失敗しました。');
+        }
+        
+        return redirect()->route('articles.index')->with('success', '記事を削除しました。');
+    }
 }

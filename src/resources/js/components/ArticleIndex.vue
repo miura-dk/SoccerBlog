@@ -213,7 +213,7 @@
                   v-model="dialog"
                   persistent
                 >
-                    <form id="delete" method="POST" action="">
+                    <form id="delete" method="POST" :action="articleDeleteUrl">
                         <input type="hidden" name="_token" :value="csrf">
                         <input type="hidden" name="_method" value="DELETE">
                         <v-card>
@@ -225,11 +225,13 @@
                             </v-btn>
 
                             <v-btn
-                              @click="dialog = false"
+                              class="pink"
+                              @click="makeDeleteUrl(article.id)"
                               type="submit"
                               form="delete">
                             削除する
                             </v-btn>
+                            <v-spacer></v-spacer>
                           </v-card-actions>
                         </v-card>
                     </form>
@@ -316,6 +318,7 @@
           articleTitle: '',
           deleteArticleId: '',
           dialog: false,
+          articleDeleteUrl: '',
         }
     },
     props:{
@@ -388,6 +391,15 @@
       getArticleTitle(obj){
         this.articleTitle = obj.title;
         this.deleteArticleId = obj.id;
+      },
+
+      // 削除するボタンを押したとき、記事のidを取得し、URLを生成
+      makeDeleteUrl(id){
+        let url = location.href; //このページのURLをstring型で取得
+        let urlArticlesDelete = ''; //初期化
+        urlArticlesDelete = url +'articles/'+ id;
+
+        this.articleDeleteUrl = urlArticlesDelete;
       },
     },
     computed:{
