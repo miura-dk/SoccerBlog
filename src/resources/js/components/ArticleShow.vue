@@ -132,17 +132,6 @@
   </header>
   
 <v-content>
-  <v-alert 
-    type="success" 
-    v-if="flashSuccessMessage !== ''"
-  >
-    {{flashSuccessMessage}}
-  </v-alert>
-  <v-alert type="error"
-    v-if="flashErrorMessage !== ''">
-      {{flashErrorMessage}}
-  </v-alert>
-  
   <v-container 
   fluid
   >
@@ -154,8 +143,6 @@
       cols="12"
       sm="8"
       md="4"
-      v-for="article in articles" 
-      :key="article.id"
       >
         <v-card
         class="mx-auto"
@@ -171,7 +158,7 @@
           </v-img>
 
           <v-card-title>
-            <a @click="showDetail(article.id)" style="text-decoration: none; color:white;">{{article['title']}}</a>
+            <a :href="urlArticlesShow" style="text-decoration: none; color:white;">{{article['title']}}</a>
             <div class="ml-auto"></div>
             <v-menu
               left
@@ -254,10 +241,9 @@
             </v-icon>
             {{ article['user_name'] }}
 
-            <div class="ml-auto"></div>
-
             <v-btn
               color="#00BCD4"
+              class="ml-auto"
             >
               <v-icon class="mr-1">
                 mdi-account-plus-outline
@@ -267,6 +253,7 @@
           </v-card-text>
 
           <v-card-text>
+            <div>{{article['content']}}</div>
 
             <div>
               <v-icon class="mr-2">
@@ -288,16 +275,7 @@
               </v-icon>
               お気に入り追加
             </v-btn>
-
-            <v-btn
-              color="#00BCD4"
-              @click="showDetail(article.id)"
-            >
-              続きを読む
-              <v-icon class="ml-1">
-                mdi-chevron-double-right
-              </v-icon>
-            </v-btn>
+            
           </v-card-actions>
         </v-card>
       </v-col>
@@ -313,7 +291,6 @@
   export default {
     data(){
         return {
-          dateResult:'',
           drawer: false,
           csrf: document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
           articleTitle: '',
@@ -323,10 +300,6 @@
         }
     },
     props:{
-        articles:{
-          type: Array,
-          required: true,
-        },
         urlRegister:{
           type: String,
         },
@@ -343,33 +316,14 @@
         urlArticlesCreate:{
           type: String,
         },
-        flashSuccessMessage:{
-          type: String,
-          dafault: '',
+        article:{
+          type: Array,
         },
-        flashErrorMessage:{
+        urlArticlesShow:{
           type: String,
-          dafault: '',
-        },
+        }
     },
     methods: {
-      // timestampから指定したdate形式(Y/m/d H:i:s)に変換
-      /*
-      changeTimestampToFormat(date){
-        //let timestamp = 1318518000;
-        let d = new Date(date*1000);
-        let year = d.getFullYear();
-        let month = d.getMonth() + 1;
-        let day = d.getDate();
-        let hour = (d.getHours()<10) ? '0'+d.getHours() : (d.getHours());
-        let min = (d.getMinutes()<10) ? '0'+d.getMinutes() : (d.getMinites());
-        let sec = (d.getSeconds()<10) ? '0'+d.getSeconds() : (d.getSeconds());
-
-        this.dateResult = year+'-'+month+'-'+day+' '+hour+':'+min+':'+sec;
-        return this.dateResult;
-      },
-      */
-
       editArticle(id){
         //ここに編集ボタンを押したときに対象の記事のid(article.id)を取得してそれをURL{article}部分に組み込む処理をつくる。例として@click="editArticle(article.id)"
         let url = location.href; //このページのURLをstring型で取得
@@ -401,16 +355,6 @@
         urlArticlesDelete = url +'articles/'+ id;
 
         this.articleDeleteUrl = urlArticlesDelete;
-      },
-
-      showDetail(id){
-        //ここにタイトル、`続きを読む`ボタンを押したときに対象の記事のid(article.id)を取得してそれをURL{article}部分に組み込む処理をつくる。例として@click="editArticle(article.id)"
-        let url = location.href; //このページのURLをstring型で取得
-        let urlArticleShow = ''; //初期化
-        urlArticleShow = url +'articles/'+ id;
-
-        // 詳細ページへ遷移する
-        location.href = urlArticleShow;
       },
     },
     computed:{
