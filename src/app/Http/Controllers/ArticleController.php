@@ -13,6 +13,7 @@ class ArticleController extends Controller
     public function __construct()
     {
         $this->article = new Article();
+        $this->authorizeResource(Article::class, 'article');
     }
     
     /**
