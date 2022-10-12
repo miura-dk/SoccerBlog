@@ -170,4 +170,21 @@ class ArticleController extends Controller
         
         return redirect()->route('articles.index')->with('success', '記事を削除しました。');
     }
+
+    /**
+     * 記事詳細表示
+     */
+    public function show(Article $article)
+    {
+        $article->user_name = $article->user->name; //投稿ユーザー名:user_name
+        $created_at = $article->created_at;
+        $article->created_date = date("Y/m/d H:i:s", strtotime($created_at)); //作成日を指定フォーマットへ:created_date
+        $article->matched  = false; //matched
+        if(Auth::id() === $article->user_id){
+            $article->matched = true;
+        }
+
+        return view('articles.show', compact('article'));
+    }
+
 }
